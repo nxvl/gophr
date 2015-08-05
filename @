@@ -1,0 +1,5 @@
+main.go|8| undefined: NewRouter
+main.go|9| undefined: HandleHome
+main.go|11| undefined: NewRouter
+main.go|12| undefined: HandleImageNew
+main.go|16| undefined: AuthenticateRequest
