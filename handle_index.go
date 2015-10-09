@@ -7,6 +7,5 @@ import (
 )
 
 func HandleHome(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	// Display Home page
 	RenderTemplate(w, r, "index/home", nil)
 }
