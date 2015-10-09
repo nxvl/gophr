@@ -14,18 +14,26 @@ func NewRouter() *httprouter.Router {
 }
 
 func main() {
-		router := NewRouter()
+	router := NewRouter()
 
-		router.Handle("GET", "/", HandleHome)
-		router.Handle("GET", "/register", HandleUserNew)
-		router.Handle("POST", "/register", HandleUserCreate)
+	router.Handle("GET", "/", HandleHome)
+	router.Handle("GET", "/register", HandleUserNew)
+	router.Handle("POST", "/register", HandleUserCreate)
+	router.Handle("GET", "/login", HandleSessionNew)
+	router.Handle("POST", "/login", HandleSessionCreate)
 
-		router.ServeFiles(
-			"/assets/*filepath",
-			http.Dir("assets/"),
-		)
+	router.ServeFiles(
+		"/assets/*filepath",
+		http.Dir("assets/"),
+	)
 
-		middleware := Middleware{}
-		middleware.Add(router)
-		log.Fatal(http.ListenAndServe(":3000", middleware))
+	secureRouter := NewRouter()
+	secureRouter.Handle("GET", "/sign-out", HandleSessionDestroy)
+
+	middleware := Middleware{}
+	middleware.Add(router)
+	middleware.Add(http.HandlerFunc(RequireLogin))
+	middleware.Add(secureRouter)
+
+	log.Fatal(http.ListenAndServe(":3000", middleware))
 }
